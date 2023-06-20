@@ -4,7 +4,7 @@ const PORT = process.env.PORT_ONE || 9090;
 const mongoose = require("mongoose");
 const Order = require("./Order");
 const amqp = require("amqplib");
-const isAuthenticated = require("../isAuthenticated");
+const isAuthenticated = require("./isAuthenticated");
 
 var channel, connection;
 

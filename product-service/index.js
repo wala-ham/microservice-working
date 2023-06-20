@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const Product = require("./Product");
 const jwt = require("jsonwebtoken");
 const amqp = require("amqplib");
-const isAuthenticated = require("../isAuthenticated");
+const isAuthenticated = require("./isAuthenticated");
 var order;
 
 var channel, connection;
