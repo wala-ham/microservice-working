@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT_ONE || 8080;
+const PORT = process.env.PORT_ONE || 8080 ;
 const mongoose = require("mongoose");
 const Product = require("./Product");
 const jwt = require("jsonwebtoken");
@@ -31,21 +31,23 @@ async function connect() {
 connect();
 
 app.post("/product/buy", isAuthenticated, async (req, res) => {
-    const { ids } = req.body;
-    const products = await Product.find({ _id: { $in: ids } });
-    channel.sendToQueue(
-        "ORDER",
-        Buffer.from(
-            JSON.stringify({
-                products,
-                userEmail: req.user.email,
-            })
-        )
-    );
-    channel.consume("PRODUCT", (data) => {
-        order = JSON.parse(data.content);
-    });
-    return res.json(order);
+  
+        const { ids } = req.body;
+        const products = await Product.find({ _id: { $in: ids } });
+        channel.sendToQueue(
+            "ORDER",
+            Buffer.from(
+                JSON.stringify({
+                    products,
+                    userEmail: req.user.email,
+                })
+            )
+        );
+        channel.consume("PRODUCT", (data) => {
+            order = JSON.parse(data.content);
+        });
+        return res.json(order);
+       
 });
 
 app.post("/product/create", isAuthenticated, async (req, res) => {
