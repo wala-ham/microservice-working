@@ -6,10 +6,8 @@ const Order = require("./Order");
 const amqp = require("amqplib");
 const isAuthenticated = require("./isAuthenticated");
 const kafka = require('kafka-node');
-const Consumer = kafka.Consumer;
 const client = new kafka.KafkaClient({ kafkaHost: 'localhost:9092' });
-const producer = kafka.producer();
-const { Kafka } = require('kafkajs');
+const consumer = new kafka.Consumer( client, [{ topic: "PRODUCT", partition: 0 }] );
 
 
 const consumerOptions = {
@@ -22,7 +20,6 @@ const consumerOptions = {
 };
 
 const topics = ['ORDER','PRODUCT'];
-const consumer = new Consumer(client, topics, consumerOptions);
 const kafka = new Kafka({
   clientId: 'my-producer',
   brokers: ['localhost:9092'],
@@ -58,6 +55,12 @@ function createOrder(products, userEmail) {
     newOrder.save();
     return newOrder;
 }
+
+
+
+
+
+consumer.on("message", async function(message) {  console.log(message)});
 
 /* async function connect() {
     const amqpServer = "amqp://localhost:5672";
